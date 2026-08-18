@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-SITE_DIR="/workspaces/$(basename "$PWD")"
+SITE_DIR="/workspaces"
 cd "$SITE_DIR"
 echo "Site dir: $SITE_DIR"
 
@@ -26,14 +26,16 @@ if ! command -v wp >/dev/null 2>&1; then
   chmod +x /usr/local/bin/wp
 fi
 
-# --- 3. wp-config.php (create from sample) ---
+# --- 3. wp-config.php (generate via wp-cli) ---
 if [ ! -f wp-config.php ]; then
   echo "-> generate wp-config.php"
-  cp wp-config-sample.php wp-config.php
-  perl -pi -e "s/database_name_here/axel/g; s/username_here/axel/g; s/password_here/axelpass/g; s/localhost/db/g" wp-config.php
-
-  SALTS=$(curl -s https://api.wordpress.org/secret-key/1.1/salt/)
-  perl -0pi -e "s/define\( *'AUTH_KEY'.*?\n\\);/$SALTS/gs" wp-config.php
+  wp config create --force \
+    --dbname=axel --dbuser=axel --dbpass=axelpass --dbhost=db >/dev/null 2>&1 || \
+    {
+      # fallback: manual copy + substitutions if wp-cli config fails
+      cp wp-config-sample.php wp-config.php
+      perl -pi -e "s/database_name_here/axel/g; s/username_here/axel/g; s/password_here/axelpass/g; s/localhost/db/g" wp-config.php
+    }
 fi
 
 # --- 4. Wait for MariaDB ---
@@ -73,13 +75,19 @@ RewriteRule . /index.php [L]
 # END WordPress
 EOF
 
-# --- 8. Start Apache on 8080 ---
-sed -i 's/Listen 80/Listen 8080/' /etc/apache2/ports.conf 2>/dev/null || true
-sed -i 's/<VirtualHost \*:80>/<VirtualHost *:8080>/' /etc/apache2/sites-available/000-default.conf 2>/dev/null || true
-sed -i 's#DocumentRoot /var/www/html#DocumentRoot '"$SITE_DIR"'#' /etc/apache2/sites-available/000-default.conf 2>/dev/null || true
-chmod -R 755 "$SITE_DIR"
-a2enmod rewrite >/dev/null 2>&1 || true
-apachectl -k restart >/dev/null 2>&1 || apache2ctl -k restart >/dev/null 2>&1 || true
+# --- 8. Serve via Apache (or fallback to wp built-in server) ---
+if apache2ctl -v >/dev/null 2>&1; then
+  command -v apache2 >/dev/null 2>&1 || apt-get install -y -q apache2 >/dev/null 2>&1 || true
+  sed -i 's/Listen 80/Listen 8080/' /etc/apache2/ports.conf 2>/dev/null || true
+  sed -i 's/<VirtualHost \*:80>/<VirtualHost *:8080>/' /etc/apache2/sites-available/000-default.conf 2>/dev/null || true
+  sed -i 's#DocumentRoot /var/www/html#DocumentRoot '"$SITE_DIR"'#' /etc/apache2/sites-available/000-default.conf 2>/dev/null || true
+  chmod -R 755 "$SITE_DIR"
+  a2enmod rewrite >/dev/null 2>&1 || true
+  apache2ctl -k restart >/dev/null 2>&1 || apachectl -k restart >/dev/null 2>&1 || true
+else
+  echo "-> Apache not found, using wp built-in server"
+  nohup wp --path="$SITE_DIR" server --host=0.0.0.0 --port=8080 >/tmp/wp-server.log 2>&1 &
+fi
 
 echo
 echo "==================================================="
