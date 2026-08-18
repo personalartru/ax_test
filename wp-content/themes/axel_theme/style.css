@@ -1,0 +1,271 @@
+/*
+Theme Name: Axel Theme
+Author: Sizeoff
+Version: 1.0
+Text Domain: axel_theme
+*/
+
+.mind__card-info-desc {
+   min-height: 37px; 
+}
+
+.vmodal {
+    display: flex !important;
+    justify-content: center !important;
+}
+.vmodal iframe {
+    width: auto !important;
+    left: auto !important;
+    aspect-ratio: 9 / 16 !important;
+}
+
+.cms strong {
+    letter-spacing: -.02em;
+    color: var(--violet);
+    font-size: 22rem;
+    font-weight: 600;
+    line-height: 150%;
+}
+
+body .is-layout-flex {
+	flex-direction: row!important;;
+}
+
+
+body .mind__card {
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+}
+body .mind__card-info {
+height: 100%;
+}
+body .mind__card-info-wrapper {
+height: 100%;
+}
+body .mind__card-info-btn {
+margin-top: auto;
+}
+
+
+@media (max-width: 768px) {
+.article__banner {
+	background-image: none!important;
+}
+.hero .embla__dot:nth-child(n) {
+	background-image: none!important;
+}
+.cms strong {
+	font-size: 16rem;
+}
+.exclusive__content:after, .materials__card:nth-child(n+4) {
+	display: block;
+}
+
+body .hero .embla__slide:nth-child(1) .hero__item {
+	justify-content: flex-start;
+}
+body .hero__item-tag {
+	display: none;
+}
+body .cookie {
+	padding: 0 12rem;
+	bottom: 20rem;
+}
+}
+
+
+@media (min-width: 768px) {
+.hero__btn--sticky {
+	display: none!important;
+}
+}
+
+/* Стили для модального окна Rutube */
+.rutube-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.rutube-modal-overlay.active {
+    opacity: 1;
+}
+
+.rutube-modal-content {
+    position: relative;
+    width: 90%;
+    max-width: 900px;
+    background: #000;
+    border-radius: 12px;
+    overflow: hidden;
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.rutube-modal-overlay.active .rutube-modal-content {
+    transform: scale(1);
+}
+
+.rutube-close-button {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.15);
+    border: none;
+    border-radius: 50%;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+}
+
+.rutube-close-button:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: rotate(90deg);
+}
+
+.rutube-video-container {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    height: 0;
+}
+
+.rutube-video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+.rutube-modal-content {
+    width: 95%;
+    margin: 20px;
+}
+
+.rutube-close-button {
+    top: 10px;
+    right: 10px;
+    width: 35px;
+    height: 35px;
+    font-size: 20px;
+}
+.vmodal {
+    height: 80vh !important;
+}    
+}
+
+
+
+
+/* Модальное окно и затемнение */
+.msd-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999999;
+  visibility: hidden;
+}
+.msd-overlay.msd-visible {
+  visibility: visible;
+}
+/* Окно */
+.msd-dialog {
+  background: #ffffff;
+  width: 520px;
+  max-width: calc(100% - 32px);
+  padding: 32px;
+  border-radius: 28px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  box-sizing: border-box;
+}
+.msd-dialog p {
+  font-size: 16px;
+  line-height: 24px;
+  color: #1e2a3a;
+  margin: 0 0 16px 0;
+}
+.msd-dialog strong {
+  font-size: 16px;
+  font-weight: 700;
+}
+.msd-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+}
+.msd-btn {
+  padding: 8px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 40px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s;
+  font-family: inherit;
+}
+.msd-btn-primary {
+  background: #5b54dc;
+  color: #ffffff;
+}
+.msd-btn-primary:hover {
+  background: #4a44c2;
+}
+.msd-btn-secondary {
+  background: #f1f5f9;
+  color: #1e293b;
+  border: 1px solid #cbd5e1;
+}
+.msd-btn-secondary:hover {
+  background: #e2e8f0;
+}
+/* Блюр для main (или body, если main нет) – применяется через скрипт */
+.msd-blur {
+  filter: blur(8px);
+  pointer-events: none;
+  user-select: none;
+}
+/* Адаптив */
+@media (max-width: 600px) {
+  .msd-dialog {
+    padding: 24px;
+  }
+  .msd-buttons {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .msd-btn {
+    width: 100%;
+    text-align: center;
+  }
+}

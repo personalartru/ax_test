@@ -1,0 +1,22 @@
+# This file was updated by Duplicator on 2025-09-12 13:51:38.
+# See the original_files_ folder for the original source_site_htaccess file.
+# BEGIN WordPress
+# Директивы (строки) между `BEGIN WordPress` и `END WordPress`
+# созданы автоматически и подлежат изменению только через фильтры WordPress.
+# Сделанные вручную изменения между этими маркерами будут перезаписаны.
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+RewriteBase /
+RewriteRule ^index\.php$ - [L]
+RewriteRule ^css/(.*) /wp-content/themes/axel_theme/css/$1 [QSA,L]
+RewriteRule ^fonts/(.*) /wp-content/themes/axel_theme/fonts/$1 [QSA,L]
+RewriteRule ^files/(.*) /wp-content/themes/axel_theme/files/$1 [QSA,L]
+RewriteRule ^images/(.*) /wp-content/themes/axel_theme/images/$1 [QSA,L]
+RewriteRule ^js/(.*) /wp-content/themes/axel_theme/js/$1 [QSA,L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.php [L]
+</IfModule>
+
+# END WordPress
